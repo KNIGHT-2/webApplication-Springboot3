@@ -1,12 +1,18 @@
 package com.patrick.application.entities;
 
+import jakarta.persistence.*;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
+@Entity //Especificando que essa classe será uma entidade
+@Table(name = "tb_user") //Renomeando a tabela, pois "user" é uma palavra reservada pelo banco de dados H2
 public class User implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
+    @Id//dizendo que será a chave primário
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //Dizendo que será gerada automaticamente, e com auto incremento
     private Long id;
     private String name;
     private String email;
