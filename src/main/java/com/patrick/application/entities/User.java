@@ -1,9 +1,12 @@
 package com.patrick.application.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity //Especificando que essa classe será uma entidade
@@ -18,6 +21,9 @@ public class User implements Serializable {
     private String email;
     private String phone;
     private String password;
+
+    @OneToMany(mappedBy = "client")//passando o nome do atributo que está do outro lado da relação
+    List<Order> orders = new ArrayList<>();
 
     public User(){}
 
@@ -67,6 +73,11 @@ public class User implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @JsonIgnore//Faz com que as informações da associação sejam buscadas apenas quando forem requisitadas
+    public List<Order> getOrders(){
+        return  orders;
     }
 
     @Override
