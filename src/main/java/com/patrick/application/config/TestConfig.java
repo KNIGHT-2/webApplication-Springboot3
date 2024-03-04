@@ -1,8 +1,10 @@
 package com.patrick.application.config;
 
+import com.patrick.application.entities.Category;
 import com.patrick.application.entities.Order;
 import com.patrick.application.entities.User;
 import com.patrick.application.entities.enums.OrderStatus;
+import com.patrick.application.repositories.CategoryRepository;
 import com.patrick.application.repositories.OrderRepository;
 import com.patrick.application.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +24,17 @@ public class TestConfig implements CommandLineRunner {
     private UserRepository userRepository;//Injetando uma dependência do UserRepository
     @Autowired
     private OrderRepository orderRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
     @Override
     public void run(String... args) throws Exception {
+
+        Category c1 = new Category(null, "Electronics");
+        Category c2 = new Category(null, "Books");
+        Category c3 = new Category(null, "Computers");
+
+        categoryRepository.saveAll(Arrays.asList(c1, c2, c3));
 
         User u1 = new User(null, "Maria Brown", "maria@email.com", "9999999", "123456");
         User u2 = new User(null, "Alex Green", "alex@email.com", "88888888", "654321");
@@ -35,6 +46,5 @@ public class TestConfig implements CommandLineRunner {
         Order o3 = new Order(null, Instant.parse("2024-02-03T07:21:47Z"), OrderStatus.WAITING_PAYMENT, u1);
 
         orderRepository.saveAll(Arrays.asList(o1, o2, o3));
-
     }
 }
