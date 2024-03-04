@@ -2,6 +2,7 @@ package com.patrick.application.config;
 
 import com.patrick.application.entities.Order;
 import com.patrick.application.entities.User;
+import com.patrick.application.entities.enums.OrderStatus;
 import com.patrick.application.repositories.OrderRepository;
 import com.patrick.application.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +30,9 @@ public class TestConfig implements CommandLineRunner {
 
         userRepository.saveAll(Arrays.asList(u1, u2));
 
-        Order o1 = new Order(null, Instant.parse("2024-01-12T20:53:30Z"), u1);
-        Order o2 = new Order(null, Instant.parse("2024-02-27T13:42:12Z"), u2);
-        Order o3 = new Order(null, Instant.parse("2024-02-03T07:21:47Z"), u1);
+        Order o1 = new Order(null, Instant.parse("2024-01-12T20:53:30Z"), OrderStatus.PAID, u1);
+        Order o2 = new Order(null, Instant.parse("2024-02-27T13:42:12Z"), OrderStatus.WAITING_PAYMENT, u2);
+        Order o3 = new Order(null, Instant.parse("2024-02-03T07:21:47Z"), OrderStatus.WAITING_PAYMENT, u1);
 
         orderRepository.saveAll(Arrays.asList(o1, o2, o3));
 
