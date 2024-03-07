@@ -1,14 +1,23 @@
 package com.patrick.application.entities;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.patrick.application.entities.enums.OrderStatus;
-import jakarta.persistence.*;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.patrick.application.entities.enums.OrderStatus;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tb_order")
@@ -28,6 +37,9 @@ public class Order implements Serializable {
     @JoinColumn(name = "client_id")//nome da chave estrangeira no banco de dados
     private User client;
 
+    @OneToMany(mappedBy = "id.order")
+    private Set<OrderItem> items = new HashSet<>();
+    
     public Order(){}
 
     public Order(Long id, Instant moment,OrderStatus orderStatus, User client) {
@@ -71,7 +83,11 @@ public class Order implements Serializable {
         }
     }
 
-    @Override
+    public Set<OrderItem> getItems() {
+		return items;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Order order)) return false;

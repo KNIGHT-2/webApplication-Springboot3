@@ -1,21 +1,24 @@
 package com.patrick.application.config;
 
-import com.patrick.application.entities.Category;
-import com.patrick.application.entities.Order;
-import com.patrick.application.entities.Product;
-import com.patrick.application.entities.User;
-import com.patrick.application.entities.enums.OrderStatus;
-import com.patrick.application.repositories.CategoryRepository;
-import com.patrick.application.repositories.OrderRepository;
-import com.patrick.application.repositories.ProductRepository;
-import com.patrick.application.repositories.UserRepository;
+import java.time.Instant;
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-import java.time.Instant;
-import java.util.Arrays;
+import com.patrick.application.entities.Category;
+import com.patrick.application.entities.Order;
+import com.patrick.application.entities.OrderItem;
+import com.patrick.application.entities.Product;
+import com.patrick.application.entities.User;
+import com.patrick.application.entities.enums.OrderStatus;
+import com.patrick.application.repositories.CategoryRepository;
+import com.patrick.application.repositories.OrderItemRepository;
+import com.patrick.application.repositories.OrderRepository;
+import com.patrick.application.repositories.ProductRepository;
+import com.patrick.application.repositories.UserRepository;
 
 @Configuration
 @Profile("test")
@@ -30,6 +33,9 @@ public class TestConfig implements CommandLineRunner {
     private CategoryRepository categoryRepository;
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private OrderItemRepository orderItemRepository;
+    
     @Override
     public void run(String... args) throws Exception {
 
@@ -52,12 +58,6 @@ public class TestConfig implements CommandLineRunner {
 
         userRepository.saveAll(Arrays.asList(u1, u2));
 
-        Order o1 = new Order(null, Instant.parse("2024-01-12T20:53:30Z"), OrderStatus.PAID, u1);
-        Order o2 = new Order(null, Instant.parse("2024-02-27T13:42:12Z"), OrderStatus.WAITING_PAYMENT, u2);
-        Order o3 = new Order(null, Instant.parse("2024-02-03T07:21:47Z"), OrderStatus.WAITING_PAYMENT, u1);
-
-        orderRepository.saveAll(Arrays.asList(o1, o2, o3));
-        
         p1.getCategories().add(c2);
         p2.getCategories().add(c1);
         p2.getCategories().add(c3);
@@ -67,6 +67,17 @@ public class TestConfig implements CommandLineRunner {
         
         productRepository.saveAll(Arrays.asList(p1, p2, p3, p4, p5));
         
+        Order o1 = new Order(null, Instant.parse("2024-01-12T20:53:30Z"), OrderStatus.PAID, u1);
+        Order o2 = new Order(null, Instant.parse("2024-02-27T13:42:12Z"), OrderStatus.WAITING_PAYMENT, u2);
+        Order o3 = new Order(null, Instant.parse("2024-02-03T07:21:47Z"), OrderStatus.WAITING_PAYMENT, u1);
+
+        orderRepository.saveAll(Arrays.asList(o1, o2, o3));       
         
+        OrderItem oi1 = new OrderItem(o1, p1, 2, p1.getPrice()); 
+        OrderItem oi2 = new OrderItem(o1, p3, 1, p3.getPrice()); 
+        OrderItem oi3 = new OrderItem(o2, p3, 2, p3.getPrice()); 
+        OrderItem oi4 = new OrderItem(o3, p5, 2, p5.getPrice());
+        
+        orderItemRepository.saveAll(Arrays.asList(oi1, oi2, oi3, oi4));
     }
 }
