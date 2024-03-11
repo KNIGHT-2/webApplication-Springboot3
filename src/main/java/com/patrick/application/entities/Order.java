@@ -10,6 +10,7 @@ import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.patrick.application.entities.enums.OrderStatus;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,6 +18,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -40,6 +42,9 @@ public class Order implements Serializable {
     @OneToMany(mappedBy = "id.order")
     private Set<OrderItem> items = new HashSet<>();
     
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)//Mapeando as duas entidades para terem o mesmo Id
+    private Payment payment;
+    
     public Order(){}
 
     public Order(Long id, Instant moment,OrderStatus orderStatus, User client) {
@@ -49,7 +54,15 @@ public class Order implements Serializable {
         this.client = client;
     }
 
-    public Long getId() {
+    public Payment getPayment() {
+		return payment;
+	}
+
+	public void setPayment(Payment payment) {
+		this.payment = payment;
+	}
+
+	public Long getId() {
         return id;
     }
 
