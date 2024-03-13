@@ -99,7 +99,15 @@ public class Order implements Serializable {
     public Set<OrderItem> getItems() {
 		return items;
 	}
-
+    
+    public Double getTotal() {
+    	double sum = 0;
+    	for(OrderItem obj : items) {
+    		sum = sum + obj.getSubtotal();
+    	}
+    	return sum;
+    }
+    
 	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
