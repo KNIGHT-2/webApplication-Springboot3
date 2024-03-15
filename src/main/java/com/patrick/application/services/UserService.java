@@ -2,6 +2,8 @@ package com.patrick.application.services;
 
 import com.patrick.application.entities.User;
 import com.patrick.application.repositories.UserRepository;
+import com.patrick.application.services.exceptions.ResourceNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,8 +21,8 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public Optional<User> findById(Long id){
-        return userRepository.findById(id);
+    public User findById(Long id){
+        return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
     }
     
     public User insert(User obj) {
